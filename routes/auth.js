@@ -17,7 +17,7 @@ const express = require('express');
          const hashedPassword = await bcrypt.hash(password, 10);
          const user = new User({ name, login, password: hashedPassword });
          await user.save();
-         const token = jwt.sign({ userId: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
+         const token = jwt.sign({ userId: user._id, name: user.name, login: user.login }, process.env.JWT_SECRET, { expiresIn: '1h' });
          res.status(201).json({ token, user: { name: user.name, login: user.login } });
        } catch (err) {
          res.status(500).json({ error: err.message });
@@ -38,7 +38,7 @@ const express = require('express');
          if (!isMatch) {
            return res.status(401).json({ error: 'Invalid credentials' });
          }
-         const token = jwt.sign({ userId: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
+         const token = jwt.sign({ userId: user._id, name: user.name, login: user.login }, process.env.JWT_SECRET, { expiresIn: '1h' });
          res.json({ token, user: { name: user.name, login: user.login } });
        } catch (err) {
          res.status(500).json({ error: err.message });
