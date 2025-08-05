@@ -28,7 +28,8 @@ const express = require('express');
        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
        credentials: true
      }));
-     app.use(express.json());
+     app.use(express.json({ limit: '10mb' }));
+     app.use(express.urlencoded({ limit: '10mb', extended: true }));
      app.use('/slides', express.static('public/slides'));
 
      mongoose.connect(process.env.MONGODB_URI, {

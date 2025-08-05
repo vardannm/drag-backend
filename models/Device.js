@@ -1,12 +1,36 @@
 const mongoose = require('mongoose');
 
-const deviceSchema = new mongoose.Schema({
-  id: { type: Number, required: true, unique: true },
-  name: { type: String, required: true },
-  location: { type: String, required: true },
-  status: { type: String, enum: ['Active', 'Inactive'], default: 'Active' },
-  lastUpdate: { type: String, default: new Date().toISOString() },
-  selectedSlideId: { type: Number, required: true }
-});
+     const deviceSchema = new mongoose.Schema({
+       userId: {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: 'User',
+         required: true
+       },
+       name: {
+         type: String,
+         required: true
+       },
+       location: {
+         type: String,
+         required: true
+       },
+       status: {
+         type: String,
+         enum: ['Active', 'Inactive'],
+         default: 'Active'
+       },
+       selectedSlideId: {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: 'Slide'
+       },
+       link: {
+         type: String,
+         unique: true
+       },
+       lastUpdate: {
+         type: Date,
+         default: Date.now
+       }
+     });
 
-module.exports = mongoose.model('Device', deviceSchema);
+     module.exports = mongoose.model('Device', deviceSchema);
