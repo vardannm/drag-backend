@@ -5,23 +5,7 @@ const express = require('express');
      const router = express.Router();
 
      router.post('/register', async (req, res) => {
-       try {
-         const { name, login, password } = req.body;
-         if (!name || !login || !password) {
-           return res.status(400).json({ error: 'All fields are required' });
-         }
-         const existingUser = await User.findOne({ login });
-         if (existingUser) {
-           return res.status(400).json({ error: 'Login already exists' });
-         }
-         const hashedPassword = await bcrypt.hash(password, 10);
-         const user = new User({ name, login, password: hashedPassword });
-         await user.save();
-         const token = jwt.sign({ userId: user._id, name: user.name, login: user.login }, process.env.JWT_SECRET, { expiresIn: '1h' });
-         res.status(201).json({ token, user: { name: user.name, login: user.login } });
-       } catch (err) {
-         res.status(500).json({ error: err.message });
-       }
+       return res.status(403).json({ error: 'Self-registration is disabled. Admin must create users manually.' });
      });
 
      router.post('/login', async (req, res) => {
